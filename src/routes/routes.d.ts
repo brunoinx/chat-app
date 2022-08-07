@@ -4,6 +4,6 @@ export type AppStackProps = {
 };
 
 export type AuthStackProps = {
-  Signup: undefined;
-  Signin: undefined;
+  SignUp: undefined;
+  SignIn: undefined;
 };
