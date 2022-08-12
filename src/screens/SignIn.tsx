@@ -1,41 +1,54 @@
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
-import {
-  Box,
-  Center,
-  Heading,
-  Image,
-  Stack,
-  Icon,
-  Text,
-  VStack,
-  Flex,
-} from 'native-base';
+import { TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import * as Nb from 'native-base';
 import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../config/firebase';
 
 import backImg from '../assets/back-image.png';
 
 import { Input } from '../components/Form/Input';
 import { CustomButton } from '../components/Form/Button';
-import { useAuthNavigation } from '../hooks/useNavigation';
+import { useAuthNavigation, useAppNavigation } from '../hooks/useNavigation';
+import { useState } from 'react';
 
 export function SignIn() {
   const navigation = useAuthNavigation();
+  const appNavigation = useAppNavigation();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  async function handleSignIn() {
+    try {
+      if (!email && !password) {
+        await signInWithEmailAndPassword(auth, email, password);
+
+        console.log('login succes');
+      }
+    } catch (error) {
+      Alert.alert('Login error', error);
+    }
+  }
 
   function handleNavigateToSignUp() {
     navigation.navigate('SignUp');
   }
 
+  function handleNavigateToChat() {
+    appNavigation.navigate('Chat');
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <Box flex={1}>
-        <Image
+      <Nb.Box flex={1}>
+        <Nb.Image
           source={backImg}
           alt="imagem de background"
           resizeMode="cover"
           w="full"
         />
 
-        <Box
+        <Nb.Box
           bg="white"
           w="full"
           h="full"
@@ -43,23 +56,23 @@ export function SignIn() {
           position="absolute"
           top="1/3"
         >
-          <Center mt="10">
-            <Heading size="xl" color="sun.100">
-              Log In
-            </Heading>
-          </Center>
+          <Nb.Center mt="10">
+            <Nb.Heading size="xl" color="sun.100">
+              Sign In
+            </Nb.Heading>
+          </Nb.Center>
 
-          <Center
+          <Nb.Center
             h="60%"
             w="80%"
             mt={12}
             justifyContent="flex-start"
             alignSelf="center"
           >
-            <Stack direction="column" w="full" space={6}>
+            <Nb.Stack direction="column" w="full" space={6}>
               <Input
                 InputLeftElement={
-                  <Icon
+                  <Nb.Icon
                     as={<MaterialCommunityIcons name="email" size={32} />}
                     size={5}
                     ml="2"
@@ -71,7 +84,7 @@ export function SignIn() {
 
               <Input
                 InputLeftElement={
-                  <Icon
+                  <Nb.Icon
                     as={<Entypo name="lock" size={32} />}
                     size={5}
                     ml="2"
@@ -81,34 +94,34 @@ export function SignIn() {
                 placeholder="Password"
                 secureTextEntry
               />
-            </Stack>
+            </Nb.Stack>
 
-            <VStack
+            <Nb.VStack
               alignItems={'center'}
               w="full"
               position="absolute"
               bottom="30%"
             >
-              <CustomButton name="Login" onPress={() => console.log('oi')} />
+              <CustomButton name="Entrar" onPress={handleSignIn} />
 
-              <Flex direction="row" mt="1.5">
-                <Text fontWeight="medium" mr="1.5">
+              <Nb.Flex direction="row" mt="1.5">
+                <Nb.Text fontWeight="medium" mr="1.5">
                   Ainda não possui conta?
-                </Text>
+                </Nb.Text>
 
-                <Text
+                <Nb.Text
                   fontWeight="medium"
                   color="sun.100"
                   underline
                   onPress={handleNavigateToSignUp}
                 >
                   Crie uma aqui.
-                </Text>
-              </Flex>
-            </VStack>
-          </Center>
-        </Box>
-      </Box>
+                </Nb.Text>
+              </Nb.Flex>
+            </Nb.VStack>
+          </Nb.Center>
+        </Nb.Box>
+      </Nb.Box>
     </TouchableWithoutFeedback>
   );
 }
