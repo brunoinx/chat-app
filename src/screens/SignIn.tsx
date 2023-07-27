@@ -8,12 +8,11 @@ import backImg from '../assets/back-image.png';
 
 import { Input } from '../components/Form/Input';
 import { CustomButton } from '../components/Form/Button';
-import { useAuthNavigation, useAppNavigation } from '../hooks/useNavigation';
+import { useAuthNavigation } from '../hooks/useNavigation';
 import { useState } from 'react';
 
 export function SignIn() {
-  const navigation = useAuthNavigation();
-  const appNavigation = useAppNavigation();
+  const authNavigation = useAuthNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,19 +22,18 @@ export function SignIn() {
       if (!email && !password) {
         await signInWithEmailAndPassword(auth, email, password);
 
-        console.log('login succes');
+        authNavigation.navigate('App');
+        Alert.alert('Login sucess');
       }
+
+      authNavigation.navigate('App');
     } catch (error) {
       Alert.alert('Login error', error);
     }
   }
 
   function handleNavigateToSignUp() {
-    navigation.navigate('SignUp');
-  }
-
-  function handleNavigateToChat() {
-    appNavigation.navigate('Chat');
+    authNavigation.navigate('SignUp');
   }
 
   return (
@@ -79,6 +77,8 @@ export function SignIn() {
                     color="muted.400"
                   />
                 }
+                value={email}
+                onChangeText={setEmail}
                 placeholder="youremail@mail.com"
               />
 
@@ -91,6 +91,8 @@ export function SignIn() {
                     color="muted.400"
                   />
                 }
+                value={password}
+                onChangeText={setPassword}
                 placeholder="Password"
                 secureTextEntry
               />

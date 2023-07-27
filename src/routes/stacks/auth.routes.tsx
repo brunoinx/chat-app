@@ -5,7 +5,7 @@ import { AuthStackProps } from '../routes';
 
 import { SignIn } from '../../screens/SignIn';
 import { SignUp } from '../../screens/SignUp';
-import { Chat } from '../../screens/Chat';
+import { AppStack } from './app.routes';
 
 const { Navigator, Screen } = createNativeStackNavigator<AuthStackProps>();
 
@@ -19,7 +19,7 @@ export function AuthStack() {
     >
       <Screen name="SignIn" component={SignIn} />
       <Screen name="SignUp" component={SignUp} />
-      <Screen name="Chat" component={Chat} />
+      <Screen name="App" component={AppStack} />
     </Navigator>
   );
 }
